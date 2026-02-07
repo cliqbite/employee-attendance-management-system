@@ -4,6 +4,10 @@ import Login from './pages/Login';
 import SuperAdminDashboard from './pages/SuperAdmin/Dashboard';
 import AdminDashboard from './pages/Admin/Dashboard';
 import AttendanceMarking from './pages/Admin/Attendance';
+import EmployeeTable from './pages/SuperAdmin/Employees';
+import UnlockRequests from './pages/SuperAdmin/UnlockRequests';
+import Reports from './pages/SuperAdmin/Reports';
+import Settings from './pages/Settings';
 import Layout from './components/Layout';
 
 function App() {
@@ -31,6 +35,10 @@ function App() {
               <Layout user={user} onLogout={handleLogout}>
                 <Routes>
                   <Route path="dashboard" element={<SuperAdminDashboard />} />
+                  <Route path="employees" element={<EmployeeTable />} />
+                  <Route path="unlock-requests" element={<UnlockRequests />} />
+                  <Route path="reports" element={<Reports />} />
+                  <Route path="settings" element={<Settings user={user} />} />
                   <Route path="*" element={<Navigate to="dashboard" />} />
                 </Routes>
               </Layout>
@@ -46,6 +54,7 @@ function App() {
                 <Routes>
                   <Route path="dashboard" element={<AdminDashboard user={user} />} />
                   <Route path="attendance" element={<AttendanceMarking />} />
+                  <Route path="settings" element={<Settings user={user} />} />
                   <Route path="*" element={<Navigate to="dashboard" />} />
                 </Routes>
               </Layout>
