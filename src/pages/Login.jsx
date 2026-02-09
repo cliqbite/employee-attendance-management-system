@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogIn, Shield, Store, Mail, Lock } from 'lucide-react';
+import { LogIn, Shield, Store, Mail, Lock, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Login = ({ onLogin }) => {
@@ -11,19 +11,22 @@ const Login = ({ onLogin }) => {
 
   const handleDemoLogin = (role) => {
     setIsLoading(true);
+    // Map 'user' or any other role to 'staff' if it's not super-admin or admin
+    const effectiveRole = (role === 'super-admin' || role === 'admin') ? role : 'staff';
+
     setTimeout(() => {
       const userData = {
-        email: role === 'super-admin' ? 'superadmin@company.com' :
-          role === 'admin' ? 'manager@store1.com' : 'staff@user.com',
-        role: role,
-        name: role === 'super-admin' ? 'Super Admin' :
-          role === 'admin' ? 'Store Manager' : 'John Employee',
-        location: role === 'super-admin' ? 'All' : 'Store A'
+        email: effectiveRole === 'super-admin' ? 'superadmin@company.com' :
+          effectiveRole === 'admin' ? 'manager@store1.com' : 'staff@user.com',
+        role: effectiveRole,
+        name: effectiveRole === 'super-admin' ? 'Super Admin' :
+          effectiveRole === 'admin' ? 'Store Manager' : 'John Employee',
+        location: effectiveRole === 'super-admin' ? 'All' : 'Store A'
       };
       onLogin(userData);
       navigate(
-        role === 'super-admin' ? '/super-admin/dashboard' :
-          role === 'admin' ? '/admin/dashboard' : '/staff/dashboard'
+        effectiveRole === 'super-admin' ? '/super-admin/dashboard' :
+          effectiveRole === 'admin' ? '/admin/dashboard' : '/staff/dashboard'
       );
       setIsLoading(false);
     }, 1000);
@@ -106,9 +109,6 @@ const Login = ({ onLogin }) => {
             <Store size={16} /> Admin
           </button>
         </div>
-        <button onClick={() => handleDemoLogin('staff')} className="btn btn-secondary" style={{ width: '100%' }}>
-          <Users size={16} /> Staff / Employee
-        </button>
       </motion.div>
     </div>
   );
