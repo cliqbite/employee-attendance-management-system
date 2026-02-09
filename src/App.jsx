@@ -8,6 +8,7 @@ import EmployeeTable from './pages/SuperAdmin/Employees';
 import UnlockRequests from './pages/SuperAdmin/UnlockRequests';
 import Reports from './pages/SuperAdmin/Reports';
 import Settings from './pages/Settings';
+import StaffDashboard from './pages/Staff/Dashboard';
 import Layout from './components/Layout';
 
 function App() {
@@ -25,7 +26,12 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={
-          user ? <Navigate to={user.role === 'super-admin' ? '/super-admin/dashboard' : '/admin/dashboard'} /> : <Login onLogin={handleLogin} />
+          user ? (
+            <Navigate to={
+              user.role === 'super-admin' ? '/super-admin/dashboard' :
+                user.role === 'admin' ? '/admin/dashboard' : '/staff/dashboard'
+            } />
+          ) : <Login onLogin={handleLogin} />
         } />
 
         <Route
@@ -54,6 +60,21 @@ function App() {
                 <Routes>
                   <Route path="dashboard" element={<AdminDashboard user={user} />} />
                   <Route path="attendance" element={<AttendanceMarking />} />
+                  <Route path="settings" element={<Settings user={user} />} />
+                  <Route path="*" element={<Navigate to="dashboard" />} />
+                </Routes>
+              </Layout>
+            ) : <Navigate to="/login" />
+          }
+        />
+
+        <Route
+          path="/staff/*"
+          element={
+            user?.role === 'staff' ? (
+              <Layout user={user} onLogout={handleLogout}>
+                <Routes>
+                  <Route path="dashboard" element={<StaffDashboard user={user} />} />
                   <Route path="settings" element={<Settings user={user} />} />
                   <Route path="*" element={<Navigate to="dashboard" />} />
                 </Routes>

@@ -13,13 +13,18 @@ const Login = ({ onLogin }) => {
     setIsLoading(true);
     setTimeout(() => {
       const userData = {
-        email: role === 'super-admin' ? 'superadmin@company.com' : 'manager@store1.com',
+        email: role === 'super-admin' ? 'superadmin@company.com' :
+          role === 'admin' ? 'manager@store1.com' : 'staff@user.com',
         role: role,
-        name: role === 'super-admin' ? 'Super Admin' : 'Store Manager (Store A)',
-        location: role === 'admin' ? 'Store A' : 'All'
+        name: role === 'super-admin' ? 'Super Admin' :
+          role === 'admin' ? 'Store Manager' : 'John Employee',
+        location: role === 'super-admin' ? 'All' : 'Store A'
       };
       onLogin(userData);
-      navigate(role === 'super-admin' ? '/super-admin/dashboard' : '/admin/dashboard');
+      navigate(
+        role === 'super-admin' ? '/super-admin/dashboard' :
+          role === 'admin' ? '/admin/dashboard' : '/staff/dashboard'
+      );
       setIsLoading(false);
     }, 1000);
   };
@@ -83,6 +88,7 @@ const Login = ({ onLogin }) => {
           className="btn btn-primary"
           style={{ width: '100%', padding: '14px', marginBottom: '40px' }}
           disabled={isLoading}
+          onClick={() => handleDemoLogin('user')}
         >
           {isLoading ? 'Authenticating...' : 'Sign In'}
         </button>
@@ -92,7 +98,7 @@ const Login = ({ onLogin }) => {
           <span style={{ background: '#1e293b', padding: '0 12px', position: 'relative', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '600' }}>DEMO ACCESS</span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
           <button onClick={() => handleDemoLogin('super-admin')} className="btn btn-secondary">
             <Shield size={16} /> Super Admin
           </button>
@@ -100,6 +106,9 @@ const Login = ({ onLogin }) => {
             <Store size={16} /> Admin
           </button>
         </div>
+        <button onClick={() => handleDemoLogin('staff')} className="btn btn-secondary" style={{ width: '100%' }}>
+          <Users size={16} /> Staff / Employee
+        </button>
       </motion.div>
     </div>
   );
