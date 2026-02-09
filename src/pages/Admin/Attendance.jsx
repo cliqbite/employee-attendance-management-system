@@ -10,11 +10,21 @@ const AttendanceMarking = () => {
 
   const [employees, setEmployees] = useState([
     { id: 1, name: 'John Doe', status: 'present', ot: false, otHours: 0 },
-    { id: 2, name: 'Jane Smith', status: 'present', ot: true, otHours: 2 },
+    { id: 2, name: 'Jane Smith', status: 'holiday', ot: false, otHours: 0 },
     { id: 3, name: 'Robert Brown', status: 'half-day', ot: false, otHours: 0 },
-    { id: 4, name: 'Alice Wilson', status: 'absent', ot: false, otHours: 0 },
+    { id: 4, name: 'Alice Wilson', status: 'sick-leave', ot: false, otHours: 0 },
     { id: 5, name: 'Michael Ross', status: null, ot: false, otHours: 0 },
   ]);
+
+  const statusConfig = {
+    'present': { label: 'Present', color: 'var(--success)' },
+    'half-day': { label: 'Half Day', color: 'var(--warning)' },
+    'absent': { label: 'Absent', color: 'var(--danger)' },
+    'holiday': { label: 'Public Holiday', color: '#2dd4bf' },
+    'sick-leave': { label: 'Sick Leave', color: '#fbbf24' },
+    'vacation': { label: 'Vacation', color: '#c084fc' },
+    'leave': { label: 'Leave', color: '#94a3b8' }
+  };
 
   const handleDateChange = (e) => {
     const date = e.target.value;
@@ -134,27 +144,27 @@ const AttendanceMarking = () => {
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>EMP-00{emp.id}</p>
                 </td>
                 <td style={{ padding: '16px 24px' }}>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    {['present', 'half-day', 'absent'].map(status => (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', maxWidth: '400px' }}>
+                    {Object.keys(statusConfig).map(statusKey => (
                       <button
-                        key={status}
-                        onClick={() => handleStatusChange(emp.id, status)}
+                        key={statusKey}
+                        onClick={() => handleStatusChange(emp.id, statusKey)}
                         disabled={isLocked}
                         style={{
-                          padding: '6px 12px',
+                          padding: '6px 10px',
                           borderRadius: '6px',
                           border: '1px solid var(--card-border)',
-                          background: emp.status === status
-                            ? (status === 'present' ? 'var(--success)' : status === 'half-day' ? 'var(--warning)' : 'var(--danger)')
+                          background: emp.status === statusKey
+                            ? statusConfig[statusKey].color
                             : 'transparent',
-                          color: emp.status === status ? 'white' : 'var(--text-muted)',
-                          fontSize: '0.75rem',
+                          color: emp.status === statusKey ? 'white' : 'var(--text-muted)',
+                          fontSize: '0.7rem',
                           cursor: isLocked ? 'not-allowed' : 'pointer',
                           transition: 'all 0.2s',
-                          textTransform: 'capitalize'
+                          whiteSpace: 'nowrap'
                         }}
                       >
-                        {status.replace('-', ' ')}
+                        {statusConfig[statusKey].label}
                       </button>
                     ))}
                   </div>

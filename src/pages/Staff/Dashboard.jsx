@@ -10,6 +10,19 @@ const StaffDashboard = ({ user }) => {
     { date: '2024-02-01', status: 'Absent', checkIn: '-', ot: '0h' },
   ];
 
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Present': return 'badge-success';
+      case 'Half Day': return 'badge-warning';
+      case 'Absent': return 'badge-danger';
+      case 'Public Holiday': return 'badge-teal';
+      case 'Sick Leave': return 'badge-warning';
+      case 'Vacation': return 'badge-purple';
+      case 'Leave': return 'badge-slate';
+      default: return 'badge-slate';
+    }
+  };
+
   return (
     <div className="fade-in">
       <header style={{ marginBottom: '32px' }}>
@@ -51,7 +64,7 @@ const StaffDashboard = ({ user }) => {
               <tr key={i} style={{ borderBottom: '1px solid var(--card-border)', fontSize: '0.875rem' }}>
                 <td style={{ padding: '12px' }}>{row.date}</td>
                 <td style={{ padding: '12px' }}>
-                  <span className={`badge ${row.status === 'Present' ? 'badge-success' : row.status === 'Half Day' ? 'badge-warning' : 'badge-danger'}`}>
+                  <span className={`badge ${getStatusBadge(row.status)}`}>
                     {row.status}
                   </span>
                 </td>
